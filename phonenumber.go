@@ -1,6 +1,7 @@
 package gophone
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -26,17 +27,11 @@ func NewPhoneNumber(dialingCode string) PhoneNumber {
 }
 
 func (pn lPhoneNumber) Sanitize(phoneNumber string) string {
-	if phoneNumber == "" {
-		return ""
-	}
 	phone := pn.sanitize(phoneNumber)
 	return pn.dialingCode + phone[1:]
 }
 
 func (pn lPhoneNumber) SanitizePlus(phoneNumber string) string {
-	if phoneNumber == "" {
-		return ""
-	}
 	phone := pn.sanitize(phoneNumber)
 	return "+" + pn.dialingCode + phone[1:]
 }
@@ -47,7 +42,7 @@ func (pn lPhoneNumber) Sanitize0(phoneNumber string) string {
 }
 
 func (pn lPhoneNumber) sanitize(phoneNumber string) string {
-	if phoneNumber == "" {
+	if err := pn.validate(phoneNumber); err != nil {
 		return ""
 	}
 	phone := strings.Replace(phoneNumber, " ", "", 0)
@@ -58,4 +53,14 @@ func (pn lPhoneNumber) sanitize(phoneNumber string) string {
 		return "0" + phone[3:]
 	}
 	return phone
+}
+
+func (pn lPhoneNumber) validate(phoneNumber string) error {
+	if phoneNumber == "" {
+		return errors.New("Null")
+	}
+	if len(phoneNumber) < 3 {
+		return errors.New("Length")
+	}
+	return nil
 }
