@@ -17,30 +17,39 @@ type PhoneNumber interface {
 	Sanitize0(phoneNumber string) string
 }
 
-type phoneNumber struct {
+type lPhoneNumber struct {
 	dialingCode string
 }
 
 func NewPhoneNumber(dialingCode string) PhoneNumber {
-	return &phoneNumber{dialingCode}
+	return &lPhoneNumber{dialingCode}
 }
 
-func (pn phoneNumber) Sanitize(phoneNumber string) string {
+func (pn lPhoneNumber) Sanitize(phoneNumber string) string {
+	if phoneNumber == "" {
+		return ""
+	}
 	phone := pn.sanitize(phoneNumber)
 	return pn.dialingCode + phone[1:]
 }
 
-func (pn phoneNumber) SanitizePlus(phoneNumber string) string {
+func (pn lPhoneNumber) SanitizePlus(phoneNumber string) string {
+	if phoneNumber == "" {
+		return ""
+	}
 	phone := pn.sanitize(phoneNumber)
 	return "+" + pn.dialingCode + phone[1:]
 }
 
-func (pn phoneNumber) Sanitize0(phoneNumber string) string {
+func (pn lPhoneNumber) Sanitize0(phoneNumber string) string {
 	phone := pn.sanitize(phoneNumber)
 	return phone
 }
 
-func (pn phoneNumber) sanitize(phoneNumber string) string {
+func (pn lPhoneNumber) sanitize(phoneNumber string) string {
+	if phoneNumber == "" {
+		return ""
+	}
 	phone := strings.Replace(phoneNumber, " ", "", 0)
 	phone = strings.Replace(phone, "-", "", 0)
 	if phone[0:2] == pn.dialingCode {
