@@ -43,7 +43,7 @@ func (pn lPhoneNumber) Sanitize0(phoneNumber string) string {
 
 func (pn lPhoneNumber) sanitize(phoneNumber string) string {
 	if err := pn.validate(phoneNumber); err != nil {
-		return ""
+		return phoneNumber
 	}
 	phone := strings.Replace(phoneNumber, " ", "", 0)
 	phone = strings.Replace(phone, "-", "", 0)
